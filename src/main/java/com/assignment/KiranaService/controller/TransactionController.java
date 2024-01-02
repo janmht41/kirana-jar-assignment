@@ -1,9 +1,8 @@
 package com.assignment.KiranaService.controller;
 
 import com.assignment.KiranaService.model.TransactionRequest;
-import com.assignment.KiranaService.model.TransactionResponse;
+import com.assignment.KiranaService.model.TransactionSummaryDto;
 import com.assignment.KiranaService.service.HandleTransactionRecord;
-import com.assignment.KiranaService.service.HandleTransactionRecordImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,7 +27,7 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/transactions")
-    public List<TransactionResponse> getTransactions(@RequestParam(name = "date",required = false)
+    public List<TransactionSummaryDto> getTransactions(@RequestParam(name = "date",required = false)
                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
     {
         return handleTransactionRecord.getTransactions(date);

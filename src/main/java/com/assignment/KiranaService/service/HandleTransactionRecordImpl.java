@@ -4,7 +4,7 @@ import com.assignment.KiranaService.entity.KiranaTransaction;
 import com.assignment.KiranaService.model.ExchangeResponse;
 import com.assignment.KiranaService.model.TransactionRequest;
 
-import com.assignment.KiranaService.model.TransactionResponse;
+import com.assignment.KiranaService.model.TransactionSummaryDto;
 import com.assignment.KiranaService.repository.KiranaTransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,19 +24,9 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
     @Autowired
     private WebClient.Builder webClientBuilder;
     @Override
-    public List<TransactionResponse> getTransactions(LocalDate tranDate){
+    public List<TransactionSummaryDto> getTransactions(LocalDate tranDate){
         if(tranDate == null) tranDate = LocalDate.now();
-
-        List<KiranaTransaction> temp =  kiranaTransactionRepository.findBy();
-        List<TransactionResponse> transactionResponses = new ArrayList<>();
-        for(KiranaTransaction kiranaTransaction : temp){
-            TransactionResponse transactionResponse = new TransactionResponse(kiranaTransaction.getCreditAmount(),
-                    kiranaTransaction.getDebitAmount(),
-                    kiranaTransaction.getTransactionDetails(),
-                    kiranaTransaction.getTransactionTime());
-            transactionResponses.add(transactionResponse);
-        }
-        return  transactionResponses;
+        return kiranaTransactionRepository.getTransactionSummaryByDate(tranDate);
     }
 
     public void saveKiranaTransaction(TransactionRequest transactionRequest){
@@ -55,11 +44,11 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
 
     }
 
-    private KiranaTransaction mapToKiranaTransaction(TransactionRequest transactionRequest, Double cfactor){
+    private KiranaTransaction mapToKiranaTransaction(TransactionRequest transactionRequest, Double conversionFactor){
        Double debitAmount =transactionRequest.getTransactionType().equalsIgnoreCase("DEBIT") ? transactionRequest.getAmount():Double.valueOf(0) ;
         Double creditAmount = transactionRequest.getTransactionType().equalsIgnoreCase("CREDIT") ? transactionRequest.getAmount() : Double.valueOf(0);
-        debitAmount *= cfactor;
-        creditAmount *= cfactor;
+        debitAmount *= conversionFactor;
+        creditAmount *= conversionFactor;
         return new KiranaTransaction(
                 UUID.randomUUID(),
                 debitAmount,
