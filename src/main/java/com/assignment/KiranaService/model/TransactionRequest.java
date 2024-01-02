@@ -3,8 +3,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 
-import java.math.BigDecimal;
-
 import static com.assignment.KiranaService.utility.Constants.TRANSACTION_CURRENCY;
 import static com.assignment.KiranaService.utility.Constants.TRANSACTION_TYPE;
 
@@ -15,14 +13,18 @@ import static com.assignment.KiranaService.utility.Constants.TRANSACTION_TYPE;
 @NoArgsConstructor
 public class TransactionRequest {
 
-    private BigDecimal amount;
+    private Double amount;
     @Pattern(regexp = TRANSACTION_CURRENCY, message = "supports only INR/USD transactions ")
     private String currency;
     @Pattern(regexp = TRANSACTION_TYPE, message = "supports only debit or credit transaction")
     private String transactionType;
     private String transactionDesc;
 
-    public BigDecimal getAmount() {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Double getAmount() {
         return amount;
     }
 
@@ -35,6 +37,5 @@ public class TransactionRequest {
     public String getTransactionDesc() {
         return transactionDesc;
     }
-
 
 }
