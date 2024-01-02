@@ -1,29 +1,14 @@
 package com.assignment.KiranaService.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.sql.Date;
 
 
+@Data
+@AllArgsConstructor
 public class TransactionSummaryDto {
-
-    public Double getCreditAmount() {
-        return creditAmount;
-    }
-
-    public Double getDebitAmount() {
-        return debitAmount;
-    }
-
-
-    public Date getTransactionDate() {
-        return transactionDate;
-    }
-
-    public TransactionSummaryDto(Double creditAmount, Double debitAmount, Date transactionDate) {
-        this.creditAmount = creditAmount;
-        this.debitAmount = debitAmount;
-        this.transactionDate = transactionDate;
-    }
-
     private Double creditAmount;
     private Double debitAmount;
 

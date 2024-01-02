@@ -40,29 +40,33 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
                     .block();
              conversionFactor = exchangeResponse.getRates().get("INR");
         }
-        KiranaTransaction save = kiranaTransactionRepository.save(mapToKiranaTransaction(transactionRequest, conversionFactor));
+        kiranaTransactionRepository.save(mapToKiranaTransaction(transactionRequest, conversionFactor));
 
     }
 
     private KiranaTransaction mapToKiranaTransaction(TransactionRequest transactionRequest, Double conversionFactor){
-       Double debitAmount =transactionRequest.getTransactionType().equalsIgnoreCase("DEBIT") ? transactionRequest.getAmount():Double.valueOf(0) ;
-        Double creditAmount = transactionRequest.getTransactionType().equalsIgnoreCase("CREDIT") ? transactionRequest.getAmount() : Double.valueOf(0);
+       String transactionType = transactionRequest.getTransactionType();
+       Double value = transactionRequest.getAmount();
+       Double debitAmount =isDebitType(transactionType) ? value:Double.valueOf(0) ;
+       Double creditAmount = isCreditType(transactionType)? value: Double.valueOf(0);
         debitAmount *= conversionFactor;
         creditAmount *= conversionFactor;
-        return new KiranaTransaction(
-                UUID.randomUUID(),
-                debitAmount,
-                LocalDateTime.now(),
-                creditAmount,
-                transactionRequest.getTransactionDesc()
-        );
 
-//       return KiranaTransaction.builder()
-//                .transactionId(UUID.randomUUID())
-//                .creditAmount(creditAmount)
-//                .debitAmount(debitAmount)
-//                .transactionTime(LocalDateTime.now())
-//                .transactionDetails(transactionRequest.getTransactionDesc())
-//                .build();
+       return KiranaTransaction.builder()
+                .transactionId(UUID.randomUUID())
+                .creditAmount(creditAmount)
+                .debitAmount(debitAmount)
+                .transactionTime(LocalDateTime.now())
+                .transactionDetails(transactionRequest.getTransactionDesc())
+                .build();
+
+    }
+
+    private boolean isCreditType(String transactionType) {
+        return transactionType.equalsIgnoreCase("CREDIT");
+    }
+
+    private boolean isDebitType(String transactionType){
+        return transactionType.equalsIgnoreCase("DEBIT");
     }
 }

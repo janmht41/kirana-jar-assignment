@@ -12,30 +12,11 @@ import static com.assignment.KiranaService.utility.Constants.TRANSACTION_TYPE;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionRequest {
-
     private Double amount;
     @Pattern(regexp = TRANSACTION_CURRENCY, message = "supports only INR/USD transactions ")
     private String currency;
     @Pattern(regexp = TRANSACTION_TYPE, message = "supports only debit or credit transaction")
     private String transactionType;
     private String transactionDesc;
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-
-    public String getTransactionDesc() {
-        return transactionDesc;
-    }
 
 }
