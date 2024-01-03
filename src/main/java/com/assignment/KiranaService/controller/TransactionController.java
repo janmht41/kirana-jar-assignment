@@ -26,7 +26,7 @@ public class TransactionController {
 
     /**
      * Endpoint for recording a new transaction.
-     *
+     * This can be called whenever a transaction is executed successfully at the Kirana store
      * @param transactionRequestModel The request containing transaction details.
      * @return ResponseEntity indicating the success of the transaction recording with the Transaction ID.
      */
@@ -39,7 +39,7 @@ public class TransactionController {
 
     /**
      * Endpoint for retrieving transactions based on the provided date.
-     *
+     * This will help fetching a full statement of all transactions made on a particular business day
      * @param date The date for which transactions are requested.
      * @return ResponseEntity containing a list of transactions for the given date.
      * If not provided, returns transactions for current Date
@@ -54,7 +54,7 @@ public class TransactionController {
 
     /**
      * Endpoint for retrieving a summary of transactions for a given date.
-     *
+     * Will be useful to get a quick summary of credit and debit amounts in a given business day
      * @param date The date for which the transaction summary is requested.
      * @return ResponseEntity containing the transaction summary for the given date.
      * If not provided, returns summary for current Date
