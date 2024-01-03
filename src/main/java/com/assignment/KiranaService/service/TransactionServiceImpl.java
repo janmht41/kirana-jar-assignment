@@ -1,8 +1,8 @@
 package com.assignment.KiranaService.service;
 
 import com.assignment.KiranaService.entity.Transaction;
-import com.assignment.KiranaService.model.ExchangeResponse;
-import com.assignment.KiranaService.model.TransactionRequest;
+import com.assignment.KiranaService.model.ExchangeResponseModel;
+import com.assignment.KiranaService.model.TransactionRequestModel;
 import com.assignment.KiranaService.model.TransactionSummaryDto;
 import com.assignment.KiranaService.repository.TransactionRepository;
 import com.assignment.KiranaService.utility.ExchangeResponseUtil;
@@ -25,7 +25,7 @@ import static java.util.Objects.*;
  */
 @Service
 @AllArgsConstructor
-public class ITransactionServiceImpl implements ITransactionService {
+public class TransactionServiceImpl implements ITransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -53,16 +53,16 @@ public class ITransactionServiceImpl implements ITransactionService {
     /**
      * Saves a new transaction based on the provided transaction request.
      *
-     * @param transactionRequest The request containing transaction details.
+     * @param transactionRequestModel The request containing transaction details.
      */
     @Override
-    public UUID saveTransaction(TransactionRequest transactionRequest) {
+    public UUID saveTransaction(TransactionRequestModel transactionRequestModel) {
         var conversionFactor = Double.valueOf(1.0);
-        if (transactionRequest.getCurrency().equalsIgnoreCase(USD)) {
-            ExchangeResponse exchangeResponse = exchangeResponseUtil.getExchangeRateInfo();
-            conversionFactor = exchangeResponse.getRates().get(INR);
+        if (transactionRequestModel.getCurrency().equalsIgnoreCase(USD)) {
+            ExchangeResponseModel exchangeResponseModel = exchangeResponseUtil.getExchangeRateInfo();
+            conversionFactor = exchangeResponseModel.getRates().get(INR);
         }
-        var transaction = transformToTransaction(transactionRequest, conversionFactor);
+        var transaction = transformToTransaction(transactionRequestModel, conversionFactor);
         transactionRepository.save(transaction);
         return transaction.getTransactionId();
     }
@@ -82,13 +82,13 @@ public class ITransactionServiceImpl implements ITransactionService {
 
     /**
      * Transforms request object to Transaction Entity object
-     * @param transactionRequest Object received from record Transaction api
+     * @param transactionRequestModel Object received from record Transaction api
      * @param conversionFactor currency conversion factor for non INR transactions
      * @return Transaction entity class object to be persisted in db
      */
-    private Transaction transformToTransaction(TransactionRequest transactionRequest, Double conversionFactor) {
-        String transactionType = transactionRequest.getTransactionType();
-        Double value = transactionRequest.getAmount();
+    private Transaction transformToTransaction(TransactionRequestModel transactionRequestModel, Double conversionFactor) {
+        String transactionType = transactionRequestModel.getTransactionType();
+        Double value = transactionRequestModel.getAmount();
         Double debitAmount = isDebitType(transactionType) ? value : Double.valueOf(0);
         Double creditAmount = isCreditType(transactionType) ? value : Double.valueOf(0);
 
@@ -97,9 +97,9 @@ public class ITransactionServiceImpl implements ITransactionService {
                 .creditAmount(creditAmount * conversionFactor)
                 .debitAmount(debitAmount * conversionFactor)
                 .transactionTime(LocalDateTime.now())
-                .transactionDetails(transactionRequest.getTransactionDesc())
-                .paymentMode(transactionRequest.getPaymentMode())
-                .creationUser(transactionRequest.getCreationUser())
+                .transactionDetails(transactionRequestModel.getTransactionDesc())
+                .paymentMode(transactionRequestModel.getPaymentMode())
+                .creationUser(transactionRequestModel.getCreationUser())
                 .build();
     }
 

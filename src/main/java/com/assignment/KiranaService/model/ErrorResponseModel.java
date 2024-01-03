@@ -5,6 +5,6 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ErrorResponse {
-    Error error;
+public class ErrorResponseModel {
+    ErrorModel errorModel;
 }

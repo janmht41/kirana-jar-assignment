@@ -1,7 +1,7 @@
 package com.assignment.KiranaService.utility;
 
 
-import com.assignment.KiranaService.model.ExchangeResponse;
+import com.assignment.KiranaService.model.ExchangeResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,12 +14,12 @@ public class ExchangeResponseUtil {
     private WebClient.Builder webClientBuilder;
     @Value("${rate-conversion.url}")
     private String apiUrl;
-    public  ExchangeResponse getExchangeRateInfo(){
+    public ExchangeResponseModel getExchangeRateInfo(){
          return webClientBuilder.build()
                 .get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToMono(ExchangeResponse.class)
+                .bodyToMono(ExchangeResponseModel.class)
                 .block();
     }
 }

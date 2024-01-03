@@ -12,7 +12,7 @@ import java.util.Map;
 @Data
 @Builder
 @Getter
-public class ExchangeResponse {
+public class ExchangeResponseModel {
     private String baseCurrency;
     private Map<String, Double> rates;
 }

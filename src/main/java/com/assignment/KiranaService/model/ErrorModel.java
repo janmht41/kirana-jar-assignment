@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Error {
+public class ErrorModel {
     Integer code;
     String title;
     String message;

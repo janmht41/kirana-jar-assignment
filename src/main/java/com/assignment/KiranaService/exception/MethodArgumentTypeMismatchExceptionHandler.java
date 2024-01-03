@@ -1,7 +1,7 @@
 package com.assignment.KiranaService.exception;
 
-import com.assignment.KiranaService.model.Error;
-import com.assignment.KiranaService.model.ErrorResponse;
+import com.assignment.KiranaService.model.ErrorModel;
+import com.assignment.KiranaService.model.ErrorResponseModel;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,11 +17,11 @@ public class MethodArgumentTypeMismatchExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exc){
+    public ErrorResponseModel handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exc){
 
-        return ErrorResponse.builder().
-                error(Error.builder().code(HttpStatus.BAD_REQUEST.value())
-                        .title("Request Error")
+        return ErrorResponseModel.builder().
+                errorModel(ErrorModel.builder().code(HttpStatus.BAD_REQUEST.value())
+                        .title("Request ErrorModel")
                         .message("invalid date format")
                         .build()).
                 build();

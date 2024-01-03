@@ -10,7 +10,7 @@ import static com.assignment.KiranaService.utility.Constants.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionRequest {
+public class TransactionRequestModel {
 
     private Double amount;
 
