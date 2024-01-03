@@ -36,4 +36,9 @@ public class Transaction {
     @Column(name="TRAN_DESC")
     private String transactionDetails;
 
+    @Column(name = "PAYMENT_MODE")
+    private String paymentMode;
+
+    @Column(name = "CREATED_BY")
+    private String creationUser;
 }

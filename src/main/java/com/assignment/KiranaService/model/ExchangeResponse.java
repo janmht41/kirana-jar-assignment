@@ -13,6 +13,6 @@ import java.util.Map;
 @Builder
 @Getter
 public class ExchangeResponse {
-    private String base;
+    private String baseCurrency;
     private Map<String, Double> rates;
 }
