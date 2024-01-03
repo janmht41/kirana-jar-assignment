@@ -25,7 +25,7 @@ import static java.util.Objects.*;
  */
 @Service
 @AllArgsConstructor
-public class TransactionServiceImpl implements TransactionService {
+public class ITransactionServiceImpl implements ITransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -56,13 +56,15 @@ public class TransactionServiceImpl implements TransactionService {
      * @param transactionRequest The request containing transaction details.
      */
     @Override
-    public void saveTransaction(TransactionRequest transactionRequest) {
+    public UUID saveTransaction(TransactionRequest transactionRequest) {
         var conversionFactor = Double.valueOf(1.0);
         if (transactionRequest.getCurrency().equalsIgnoreCase(USD)) {
             ExchangeResponse exchangeResponse = exchangeResponseUtil.getExchangeRateInfo();
             conversionFactor = exchangeResponse.getRates().get(INR);
         }
-        transactionRepository.save(transformToTransaction(transactionRequest, conversionFactor));
+        var transaction = transformToTransaction(transactionRequest, conversionFactor);
+        transactionRepository.save(transaction);
+        return transaction.getTransactionId();
     }
 
     /**
@@ -73,8 +75,8 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public List<Transaction> getTransactionsByDate(LocalDate localDate) {
-        LocalDateTime startDateTime = localDate.atStartOfDay();
-        LocalDateTime endDateTime = localDate.plusDays(1).atStartOfDay().minusSeconds(1);
+        var startDateTime = localDate.atStartOfDay();
+        var endDateTime = localDate.plusDays(1).atStartOfDay().minusSeconds(1);
         return transactionRepository.findAllByTransactionTimeBetween(startDateTime, endDateTime);
     }
 

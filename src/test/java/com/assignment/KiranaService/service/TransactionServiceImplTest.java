@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceImplTest {
+public class ITransactionServiceImplTest {
     @Mock
     private TransactionRepository transactionRepository;
 
@@ -20,7 +20,7 @@ public class TransactionServiceImplTest {
     private ExchangeResponseUtil exchangeResponseUtil;
 
     @InjectMocks
-    private TransactionService transactionService;
+    private ITransactionService ITransactionService;
 
 
     @BeforeEach
