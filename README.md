@@ -1,4 +1,4 @@
-# Basic API Documentation
+# Kirana Regoster Service Documentation
 
 This documentation provides details on the API endpoints and functionalities of the Kirana Service, a backend service designed to empower Kirana stores in managing their transaction registers.
 - **Note: All amounts are stored in INR by defaul**t
