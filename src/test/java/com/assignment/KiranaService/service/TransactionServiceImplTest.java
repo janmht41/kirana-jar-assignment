@@ -44,14 +44,12 @@ public class TransactionServiceImplTest {
 
     @Test
     void getTransactionSummaryOn_shouldReturnTransactionSummary() {
-        // Arrange
+
         LocalDate currentDate = LocalDate.now();
         when(transactionRepository.getTransactionSummary(currentDate)).thenReturn(createMockTransactionSummary());
 
-        // Act
         TransactionSummaryDto result = transactionService.getTransactionSummaryOn(currentDate);
 
-        // Assert
         assertNotNull(result);
         assertEquals(Date.valueOf(currentDate), result.getTransactionDate());
         assertEquals(100.0, result.getCreditAmount());
@@ -59,30 +57,27 @@ public class TransactionServiceImplTest {
     }
     @Test
     void saveTransaction_shouldSaveTransaction() {
-        // Arrange
+
         TransactionRequestModel requestModel = createMockTransactionRequestModel();
         when(exchangeResponseUtil.getExchangeRateInfo()).thenReturn(createMockExchangeResponse());
         when(transactionRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
         UUID result = transactionService.saveTransaction(requestModel);
 
-        // Assert
         assertNotNull(result);
         verify(transactionRepository, times(1)).save(any());
     }
 
     @Test
     void getTransactionsByDate_shouldReturnListOfTransactions() {
-        // Arrange
+
         LocalDate currentDate = LocalDate.now();
         when(transactionRepository.findAllByTransactionTimeBetween(any(), any()))
                 .thenReturn(Collections.singletonList(createMockTransaction()));
 
-        // Act
+
         List<Transaction> result = transactionService.getTransactionsByDate(currentDate);
 
-        // Assert
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(currentDate, result.get(0).getTransactionTime().toLocalDate());

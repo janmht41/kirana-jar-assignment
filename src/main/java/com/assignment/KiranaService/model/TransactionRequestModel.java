@@ -4,8 +4,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import static com.assignment.KiranaService.utility.Constants.*;
-
-
 @Data
 @Builder
 @AllArgsConstructor

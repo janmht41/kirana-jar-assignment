@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
