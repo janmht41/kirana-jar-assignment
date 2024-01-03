@@ -1,7 +1,7 @@
 # Kirana Register Service Documentation
 
 This documentation provides details on the API endpoints and functionalities of the Kirana Service, a backend service designed to empower Kirana stores in managing their transaction registers.
-- **Note: All amounts are stored in INR by defaul**t
+- **Note: All amounts are stored in INR by default**
 ## 1. Record Transaction
 
 - **Endpoint:** `POST /record`
@@ -18,9 +18,9 @@ This documentation provides details on the API endpoints and functionalities of 
   }
  - **Sample Response Body:**
    ```json
-   {
-    "success": "transaction saved"
-   }
+    {
+        "Transaction ID": "3209fde6-b32e-4e9e-83cf-d51336063fa7"
+    }
    
 
 ## 2. Get Transactions by Date
@@ -30,12 +30,12 @@ This documentation provides details on the API endpoints and functionalities of 
 - **Query Parameter:**
 - `date` (optional): Date in ISO format (e.g., `2024-01-02`). If not provided, returns transactions for the current date.
 
-### Example Request
+- **Example Request:**
 
 ```http
 GET /transactions?date=2024-01-02
 ```
-### Example Response
+- **Example Response:**
 
 ```json
 [
@@ -53,9 +53,9 @@ GET /transactions?date=2024-01-02
         "debitAmount": 667.75,
         "transactionTime": "2024-01-03T14:33:46.365498",
         "creditAmount": 0.0,
-        "transactionDetails": "AEIFHUIOEFH WIEUHFIWUFHW FW8HFWFH",
+        "transactionDetails": "milk",
         "paymentMode": "UPI",
-        "creationUser": "user3"
+        "creationUser": "user2"
     },
     {
         "transactionId": "0ce2896b-1714-456e-ba80-e1477a50f314",
@@ -64,23 +64,23 @@ GET /transactions?date=2024-01-02
         "creditAmount": 0.0,
         "transactionDetails": "GROCERY",
         "paymentMode": "UPI",
-        "creationUser": "xyz"
+        "creationUser": "user3"
     }
 ]
 ```
 ## 3. Get Transaction Summary
 
 - **Endpoint:** `GET /summary`
-- **Description:** Retrieves a list of transactions for a given date.
+- **Description:** Retrieves total debit and credit transactions made by kirana store on a given date.
 - **Query Parameter:**
-- `date` (optional): Date in ISO format (e.g., `2024-01-02`). If not provided, returns transactions for the current date.
+- `date` (optional): Date in ISO format (e.g., `2024-01-02`). If not provided, returns the summary for the current date.
 
-### Example Request
+- **Example Request:**
 
 ```http
 GET /summary?date=2024-01-02
 ```
-### Example Response
+- **Example Response:**
 
 ```json
  {
