@@ -6,11 +6,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
+/*todo
+1) refactor and rename
+ --controller(ERROR response + validations),config for webclient, method separation for api call and failure scenario ,
+  constants
+2) tests
+3) transaction / locks
+4) Documentation / javadoc
+5) ENHANCEMENTS ??
+ */
 public class KiranaServiceApplication {
-	@Bean
-	public WebClient.Builder getWebClientBuilder(){
-		return WebClient.builder();
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(KiranaServiceApplication.class, args);
 	}

@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "KIRANA_TRANSACTIONS")
-public class KiranaTransaction {
+public class Transaction {
     @Id
     @Column(name="TRAN_ID")
     private UUID transactionId;

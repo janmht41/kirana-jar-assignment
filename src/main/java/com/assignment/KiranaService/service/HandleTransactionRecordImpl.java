@@ -1,15 +1,16 @@
 package com.assignment.KiranaService.service;
 
-import com.assignment.KiranaService.entity.KiranaTransaction;
+import com.assignment.KiranaService.entity.Transaction;
 import com.assignment.KiranaService.model.ExchangeResponse;
 import com.assignment.KiranaService.model.TransactionRequest;
 
 import com.assignment.KiranaService.model.TransactionSummaryDto;
 import com.assignment.KiranaService.repository.KiranaTransactionRepository;
+import com.assignment.KiranaService.utility.ExchangeResponseUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,10 +20,15 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class HandleTransactionRecordImpl implements HandleTransactionRecord{
+    public static final String CREDIT = "CREDIT";
+    public static final String DEBIT = "DEBIT";
+
     @Autowired
     private  KiranaTransactionRepository kiranaTransactionRepository;
+
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private ExchangeResponseUtil exchangeResponseUtil;
+
     @Override
     public List<TransactionSummaryDto> getTransactions(LocalDate tranDate){
         if(tranDate == null) tranDate = LocalDate.now();
@@ -32,19 +38,14 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
     public void saveKiranaTransaction(TransactionRequest transactionRequest){
          Double conversionFactor = Double.valueOf(1.0);
         if(transactionRequest.getCurrency().equalsIgnoreCase("USD")) {
-            ExchangeResponse exchangeResponse = webClientBuilder.build()
-                    .get()
-                    .uri("https://api.fxratesapi.com/latest?base=USD&currencies=INR")
-                    .retrieve()
-                    .bodyToMono(ExchangeResponse.class)
-                    .block();
+             ExchangeResponse exchangeResponse = exchangeResponseUtil.getExchangeRate();
              conversionFactor = exchangeResponse.getRates().get("INR");
         }
         kiranaTransactionRepository.save(mapToKiranaTransaction(transactionRequest, conversionFactor));
 
     }
 
-    private KiranaTransaction mapToKiranaTransaction(TransactionRequest transactionRequest, Double conversionFactor){
+    private Transaction mapToKiranaTransaction(TransactionRequest transactionRequest, Double conversionFactor){
        String transactionType = transactionRequest.getTransactionType();
        Double value = transactionRequest.getAmount();
        Double debitAmount =isDebitType(transactionType) ? value:Double.valueOf(0) ;
@@ -52,7 +53,7 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
         debitAmount *= conversionFactor;
         creditAmount *= conversionFactor;
 
-       return KiranaTransaction.builder()
+       return Transaction.builder()
                 .transactionId(UUID.randomUUID())
                 .creditAmount(creditAmount)
                 .debitAmount(debitAmount)
@@ -63,10 +64,10 @@ public class HandleTransactionRecordImpl implements HandleTransactionRecord{
     }
 
     private boolean isCreditType(String transactionType) {
-        return transactionType.equalsIgnoreCase("CREDIT");
+        return transactionType.equalsIgnoreCase(CREDIT);
     }
 
     private boolean isDebitType(String transactionType){
-        return transactionType.equalsIgnoreCase("DEBIT");
+        return transactionType.equalsIgnoreCase(DEBIT);
     }
 }

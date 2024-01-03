@@ -26,7 +26,7 @@ public class TransactionController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(value = "/transactions")
+    @GetMapping(value = "/summary")
     public List<TransactionSummaryDto> getTransactions(@RequestParam(name = "date",required = false)
                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
     {
