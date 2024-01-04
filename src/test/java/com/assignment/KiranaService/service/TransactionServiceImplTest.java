@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.assignment.KiranaService.utility.Constants.USD;
@@ -44,9 +45,8 @@ public class TransactionServiceImplTest {
 
     @Test
     void getTransactionSummaryOn_shouldReturnTransactionSummary() {
-
         LocalDate currentDate = LocalDate.now();
-        when(transactionRepository.getTransactionSummary(currentDate)).thenReturn(createMockTransactionSummary());
+        when(transactionRepository.getTransactionSummary(currentDate)).thenReturn(Optional.of(createMockTransactionSummary()));
 
         TransactionSummaryDto result = transactionService.getTransactionSummaryOn(currentDate);
 

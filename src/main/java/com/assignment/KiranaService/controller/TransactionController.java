@@ -34,7 +34,6 @@ public class TransactionController {
     public ResponseEntity<Map<String, Object>> recordTransaction(@RequestBody @Valid TransactionRequestModel transactionRequestModel) {
        var transactionId =  ITransactionService.saveTransaction(transactionRequestModel);
         return ResponseEntity.ok(Map.of("Transaction ID", transactionId));
-
     }
 
     /**

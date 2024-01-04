@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -21,7 +22,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
             "FROM Transaction t " +
             "WHERE DATE(t.transactionTime) = :date " +
             "GROUP BY DATE(t.transactionTime)")
-    TransactionSummaryDto getTransactionSummary(@Param("date") LocalDate date);
+    Optional<TransactionSummaryDto> getTransactionSummary(@Param("date") LocalDate date);
 
 }
 

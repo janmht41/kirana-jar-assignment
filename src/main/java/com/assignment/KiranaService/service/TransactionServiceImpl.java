@@ -14,11 +14,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.assignment.KiranaService.utility.Constants.*;
-import static java.util.Objects.*;
+
 
 /**
  * Service implementation for managing Kirana store transactions.
@@ -41,13 +41,19 @@ public class TransactionServiceImpl implements ITransactionService {
      */
     @Override
     public TransactionSummaryDto getTransactionSummaryOn(LocalDate tranDate) {
-        if (isNull(tranDate)) tranDate = LocalDate.now();
-        var transactionSummary = transactionRepository.getTransactionSummary(tranDate);
-        return Objects.isNull(transactionSummary) ?
-                TransactionSummaryDto.builder()
+        tranDate = Optional.ofNullable(tranDate).orElse(LocalDate.now());
+
+        LocalDate finalTranDate = tranDate;
+        return transactionRepository.getTransactionSummary(tranDate)
+                .map(transactionSummary -> TransactionSummaryDto.builder()
+                        .transactionDate(Date.valueOf(finalTranDate))
+                        .creditAmount(transactionSummary.getCreditAmount())
+                        .debitAmount(transactionSummary.getDebitAmount())
+                        .build())
+                .orElse(TransactionSummaryDto.builder()
                         .transactionDate(Date.valueOf(tranDate))
                         .creditAmount(0.0).debitAmount(0.0)
-                        .build() : transactionSummary;
+                        .build());
     }
 
     /**
@@ -87,10 +93,10 @@ public class TransactionServiceImpl implements ITransactionService {
      * @return Transaction entity class object to be persisted in db
      */
     private Transaction transformToTransaction(TransactionRequestModel transactionRequestModel, Double conversionFactor) {
-        String transactionType = transactionRequestModel.getTransactionType();
-        Double value = transactionRequestModel.getAmount();
-        Double debitAmount = isDebitType(transactionType) ? value : Double.valueOf(0);
-        Double creditAmount = isCreditType(transactionType) ? value : Double.valueOf(0);
+        var transactionType = transactionRequestModel.getTransactionType();
+        var value = transactionRequestModel.getAmount();
+        var debitAmount = isDebitType(transactionType) ? value : Double.valueOf(0);
+        var creditAmount = isCreditType(transactionType) ? value : Double.valueOf(0);
 
         return Transaction.builder()
                 .transactionId(UUID.randomUUID())
